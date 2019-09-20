@@ -12,7 +12,7 @@ include_once '../objects/Product.php';
 
 // get database connection
 $database = new Database();
-$db = $database->getConnection();
+$db       = $database->getConnection();
 
 // prepare product object
 $product = new Product($db);
@@ -26,11 +26,27 @@ $product->readOne();
 if ($product->name !== null) {
     // create array
     $product_arr = [
-        'id' =>  $product->id,
-        'name' => $product->name,
-        'description' => $product->description,
-        'price' => $product->price,
-        'category_id' => $product->category_id,
+        'id'            => $product->id,
+        'name'          => $product->name,
+        'description'   => $product->description,
+        'price'         => $product->price,
+        'category_id'   => $product->category_id,
         'category_name' => $product->category_name
     ];
+
+    // set response code - 200 ok
+    http_response_code(200);
+
+    // make it json format
+    echo json_encode($product_arr);
+} else {
+
+    // set response code - 404 Not found
+    http_response_code(400);
+
+    // tell the user product not found
+    echo json_encode([
+        'message' => 'Product does not exist.'
+    ]);
+
 }
